@@ -5,6 +5,7 @@
  *
  * Usage: npx tsx src/db/seed-demo.ts
  */
+import 'dotenv/config';
 import { pool } from './pool';
 import bcrypt from 'bcrypt';
 const uuidv4 = () => crypto.randomUUID();

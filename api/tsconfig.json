@@ -18,5 +18,7 @@
     }
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  // seed.ts is the private-fork entry point: it imports src/db/seeds/, which is
+  // gitignored. It is run with tsx, never compiled, so keep it out of the build.
+  "exclude": ["node_modules", "dist", "src/db/seed.ts"]
 }

@@ -1,6 +1,6 @@
 import { Router, Response } from 'express';
 import { pool } from '../db/pool';
-import { requireAuth, requireRole, requirePropertyAccess, type AuthRequest } from '../middleware/auth';
+import { requireAuth, requireRole, type AuthRequest } from '../middleware/auth';
 
 const router = Router();
 router.use(requireAuth);
@@ -12,7 +12,8 @@ const VALID_TRANSITIONS: Record<SessionStatus, SessionStatus[]> = {
   accepted: ['in_progress'],
   in_progress: ['submitted'],
   submitted: ['approved', 'rejected'],
-  approved: [],
+  // approved → rejected reopens a signed-off session (admin "Reopen" button).
+  approved: ['rejected'],
   rejected: ['in_progress'],
 };
 

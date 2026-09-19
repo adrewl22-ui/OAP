@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,8 +7,15 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Navigate once the session store has actually caught up. Redirecting straight
+  // after login() races it: PrivateRoute would still see no session and bounce
+  // back here. This also sends an already-signed-in visitor to the dashboard.
+  useEffect(() => {
+    if (isAuthenticated) navigate('/dashboard', { replace: true });
+  }, [isAuthenticated, navigate]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -16,7 +23,6 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await login(email, password);
-      navigate('/dashboard');
     } catch {
       setError('Invalid email or password');
     } finally {
