@@ -114,7 +114,10 @@ describe('GET /properties/:propertyId/rooms', () => {
 
 describe('POST /properties/:propertyId/rooms', () => {
   it('creates a room', async () => {
-    mockQuery.mockResolvedValueOnce({ rows: [{ id: 'r-new', display_name: 'Living Room' }] });
+    mockClient.query
+      .mockResolvedValueOnce(undefined) // BEGIN
+      .mockResolvedValueOnce({ rows: [{ id: 'r-new', display_name: 'Living Room' }] }) // INSERT
+      .mockResolvedValueOnce(undefined); // COMMIT
     const app = buildApp();
     const res = await request(app)
       .post('/properties/p1/rooms')

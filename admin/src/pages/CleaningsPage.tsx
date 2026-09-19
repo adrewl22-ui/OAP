@@ -132,7 +132,8 @@ export default function CleaningsPage() {
 
   function toggleBulk(id: string) {
     const next = new Set(bulkSelected);
-    next.has(id) ? next.delete(id) : next.add(id);
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
     setBulkSelected(next);
   }
 
